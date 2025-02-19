@@ -1,20 +1,26 @@
-const db = require('./db');
+const db = require("./db");
 
-const createTable = `
-  CREATE TABLE IF NOT EXISTS tasks (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    description TEXT,
-    status ENUM('pendiente', 'en_progreso', 'completado') DEFAULT 'pendiente',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-  );
-`;
+async function initDB() {
+  try {
+    const connection = await db.getConnection();
+    console.log("? Conectado a MySQL");
 
-db.query(createTable, (err, result) => {
-  if (err) {
-    console.error('Error creando la tabla:', err);
-    return;
+    // Crear la tabla 'tasks' si no existe
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS tasks (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        description TEXT,
+        status ENUM('pendiente', 'en progreso', 'completada') DEFAULT 'pendiente',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+
+    console.log("? Tabla 'tasks' creada o ya existente.");
+    connection.release();
+  } catch (err) {
+    console.error("? Error creando la tabla:", err);
   }
-  console.log('? Tabla tasks creada o ya existente');
-  db.end();  // ?? IMPORTANTE: Cerrar conexión
-});
+}
+
+initDB();

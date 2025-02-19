@@ -7,6 +7,7 @@ const taskController = require("../controllers/taskController");
 // Rutas CRUD
 router.get("/", taskController.getTasks);
 router.post("/", taskController.createTask);
+router.get("/:id", taskController.getTaskById);
 router.put("/:id", taskController.updateTask);
 router.delete("/:id", taskController.deleteTask);
 

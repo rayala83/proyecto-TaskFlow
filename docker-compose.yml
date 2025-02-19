@@ -36,7 +36,7 @@ services:
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_DATABASE: taskflow
-      MYSQL_USER: user
+      MYSQL_ROOT_HOST: "%"  # ?? Permite conexiones remotas
     ports:
       - "3306:3306"
     volumes:
